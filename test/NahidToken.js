@@ -19,6 +19,11 @@ describe("NahidToken",function(){
     it("should give all the token to owner",async function(){
          expect(await token.balanceOf(owner.address)).to.equal(5000000);
     });
+    it("should transfer token correctly",async function(){
+        const [owner,addr1] = await ethers.getSigners();
+        await token.transfer(addr1.address,100);
+        expect(await token.balanceOf(addr1.address)).to.equal(100);
+    });
 
 
 
