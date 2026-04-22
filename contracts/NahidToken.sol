@@ -16,6 +16,9 @@ pragma solidity^0.8.20;
      }
 
      function transfer(address to, uint256 amount) public{
+         require(balanceOf[msg.sender]>=amount,"You are a gorib");
+         require(amount >0,'sorry');
+         require(balanceOf[msg.sender]- amount >=10,"You have to keep minimum balance");
               balanceOf[msg.sender]-=amount;
               balanceOf[to]+=amount;  
      emit Transfer(msg.sender,to,amount,balanceOf[msg.sender]);

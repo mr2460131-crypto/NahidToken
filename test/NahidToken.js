@@ -25,6 +25,13 @@ describe("NahidToken",function(){
         expect(await token.balanceOf(addr1.address)).to.equal(100);
     });
 
-
+   it("should fail if insufficient balance",async function(){
+     const  [owner,addr1] = await ethers.getSigners();
+      await expect(token.transfer(addr1.address,6000000)).to.be.revertedWith("You are a gorib");
+   });
+   it ("should fail,if below minimum balance",async function(){
+       const [owner,addr1] = await ethers.getSigners();
+       await expect(token.transfer(addr1.address,4999991)).to.be.revertedWith("You have to keep minimum balance");
+   }) ; 
 
 });
