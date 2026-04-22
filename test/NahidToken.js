@@ -33,5 +33,11 @@ describe("NahidToken",function(){
        const [owner,addr1] = await ethers.getSigners();
        await expect(token.transfer(addr1.address,4999991)).to.be.revertedWith("You have to keep minimum balance");
    }) ; 
+   it("should transfer tokens using transferFrom",async function(){
+      const [owner,addr1,addr2] = await ethers.getSigners();
+       await token .approve(addr1.address,500);
+       await token.connect(addr1).transferFrom(owner.address,addr2.address,100);
+       expect(await token.balanceOf(addr2.address)).to.equal(100);
+   });
 
 });
