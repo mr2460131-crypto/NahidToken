@@ -3,6 +3,7 @@ pragma solidity^0.8.20;
 
   contract NahidToken{
     address public owner;
+    bool public paused = false;
     string public name ="NahidToken";
     string public symbol= "NAID";
     uint256 public totalSupply =5000000;
@@ -21,18 +22,29 @@ pragma solidity^0.8.20;
                require(msg.sender== owner,"not the owner");
                _; 
      }
+        modifier whenNotPaused(){
+            require (paused == false,"Contract is paused");
+            _;
+        }
 
-      function mint(address to, uint256 amount) public onlyOwner{
+        function pause() public onlyOwner{
+            paused = true;
+        }
+        function unpaused() public onlyOwner{
+            paused = false;
+        }
+
+      function mint(address to, uint256 amount) public onlyOwner  whenNotPaused{
                      totalSupply += amount;
                      balanceOf[to] += amount;   
        }
-       function burn(address from ,uint256 amount) public onlyOwner{
+       function burn(address from ,uint256 amount) public onlyOwner  whenNotPaused{
                    require(balanceOf[from]>= amount,"You are a gorib");
                    balanceOf[from]-=amount;
                    totalSupply -= amount;
        }
              
-     function transfer(address to, uint256 amount) public{
+     function transfer(address to, uint256 amount) public  whenNotPaused{
          require(balanceOf[msg.sender]>=amount,"You are a gorib");
          require(amount >0,'sorry');
          require(balanceOf[msg.sender]- amount >=10,"You have to keep minimum balance");
@@ -41,12 +53,12 @@ pragma solidity^0.8.20;
      emit Transfer(msg.sender,to,amount,balanceOf[msg.sender]);
       
      }
-     function approve(address spender ,uint256 amount) public{
+     function approve(address spender ,uint256 amount) public  whenNotPaused{
              allowance[msg.sender][spender] = amount;
              emit Approval(msg.sender, spender, amount);
 
       }
-      function transferFrom(address from,address to,uint256 amount) public {
+      function transferFrom(address from,address to,uint256 amount) public  whenNotPaused {
                require(allowance[from][msg.sender]>= amount,"you are not allowed");
                require(balanceOf[from]>=amount,"you are out of balance");
                allowance[from][msg.sender] -= amount;

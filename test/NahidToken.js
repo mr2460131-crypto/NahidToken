@@ -64,5 +64,15 @@ describe("NahidToken",function(){
      await token.burn(owner.address,500);
      expect(await token.balanceOf(owner.address)).to.equal(before+BigInt(500));
    });
-
+    it("should test the pause ",async function(){
+          const [owner,addr1] = await ethers.getSigners();
+          await token.pause();
+          await expect(token.transfer(addr1.address,100)).to.be.revertedWith("Contract is paused");
+    });
+    it("should test the unpaused ",async function(){
+          const [owner,addr1] = await ethers.getSigners();
+          await token.unpaused();
+         await token.transfer(addr1.address,100);
+         expect(await token.balanceOf(addr1.address)).to.equal(100);
+    });
 });
