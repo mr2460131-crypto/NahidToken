@@ -39,5 +39,30 @@ describe("NahidToken",function(){
        await token.connect(addr1).transferFrom(owner.address,addr2.address,100);
        expect(await token.balanceOf(addr2.address)).to.equal(100);
    });
+   it("should mint tokens",async function(){
+     const [owner,addr1] =await ethers.getSigners();
+     await token.mint(addr1.address,1000);
+     expect(await token.balanceOf(addr1.address)).to.equal(1000);
+   });
+   it("should receive mint",async function(){
+     const [owner] = await ethers.getSigners();
+     const before = await token.balanceOf(owner.address);
+     await token.mint(owner.address,1000);
+     expect(await token.balanceOf(owner.address)).to.equal(before+BigInt(1000));
+   });
+   it("should burn the token ",async function(){
+       const [owner,addr1] = await ethers.getSigners();
+       await token.mint(addr1.address,1000);
+       await token.burn(addr1.address,500);
+       expect(await token.balanceOf(addr1.address)).to.equal(500);
+
+   });
+   it("should do  mint  and burn",async function(){
+     const [owner] = await ethers.getSigners();
+     const before = await token.balanceOf(owner.address);
+     await token.mint(owner.address,1000);
+     await token.burn(owner.address,500);
+     expect(await token.balanceOf(owner.address)).to.equal(before+BigInt(500));
+   });
 
 });

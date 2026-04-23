@@ -2,6 +2,7 @@
 pragma solidity^0.8.20;
 
   contract NahidToken{
+    address public owner;
     string public name ="NahidToken";
     string public symbol= "NAID";
     uint256 public totalSupply =5000000;
@@ -12,9 +13,25 @@ pragma solidity^0.8.20;
     
 
      constructor(){
+        //  address public owner;
+         owner= msg.sender;
          balanceOf[msg.sender]=totalSupply;
      }
+       modifier onlyOwner(){
+               require(msg.sender== owner,"not the owner");
+               _; 
+     }
 
+      function mint(address to, uint256 amount) public onlyOwner{
+                     totalSupply += amount;
+                     balanceOf[to] += amount;   
+       }
+       function burn(address from ,uint256 amount) public onlyOwner{
+                   require(balanceOf[from]>= amount,"You are a gorib");
+                   balanceOf[from]-=amount;
+                   totalSupply -= amount;
+       }
+             
      function transfer(address to, uint256 amount) public{
          require(balanceOf[msg.sender]>=amount,"You are a gorib");
          require(amount >0,'sorry');
