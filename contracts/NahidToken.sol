@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity^0.8.20;
-
-  contract NahidToken{
-    address public owner;
+   import "./Ownable.sol"; 
+  contract NahidToken is Ownable{
+    
     bool public paused = false;
     string public name ="NahidToken";
     string public symbol= "NAID";
@@ -12,16 +12,11 @@ pragma solidity^0.8.20;
    event Transfer(address indexed from, address indexed to, uint256 amount, uint256 remainingBalance);
     event Approval(address indexed owner, address indexed spender, uint256 amount);
     
-
-     constructor(){
-        //  address public owner;
-         owner= msg.sender;
-         balanceOf[msg.sender]=totalSupply;
-     }
-       modifier onlyOwner(){
-               require(msg.sender== owner,"not the owner");
-               _; 
-     }
+  constructor() {
+    balanceOf[msg.sender] = totalSupply;
+}
+     
+     
         modifier whenNotPaused(){
             require (paused == false,"Contract is paused");
             _;
